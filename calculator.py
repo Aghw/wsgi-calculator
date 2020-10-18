@@ -45,77 +45,124 @@ To submit your homework:
 
 """
 
-
 def add(*args):
     """ Returns a STRING with the sum of the arguments """
 
-    # TODO: Fill sum with the correct value, based on the
-    # args provided.
-    result = sum(map(int, list(args)))
-    return "The total is: {}".format(str(result))
+    total = sum(map(int, list(args)))
+    result = "The total is: {}".format(str(total))
 
+    body = ['<body style="text-align: center;margin: 0 25%; border-left: .1rem dotted gray; border-right: .1rem dotted gray;">']
+    body.append('<hr>')
+    body.append('<h3>Result of Addition Operation </h3>')
+    body.append('<br>')
+
+    parag = '<p style="text-align: left;padding: 0 2%;">{}</p>'.format(str(result))
+    body.append(parag)
+    body.append('<br>')
+    body.append('<a href="/">Back to the main page.</a>')
+    body.append('<hr>')
+    body.append('</body>')
+    return '\n'.join(body)
 
 def subtract(*args):
     """ Returns a STRING with the sum of the arguments """
 
     operands = list(map(int, list(args)))
-    result = [first - second for first, second in zip(operands, operands[1:])]
-    return "The result is: {}".format(str(result[0]))
+    subtract = [first - second for first, second in zip(operands, operands[1:])]
+    result = "The result is: {}".format(str(subtract[0]))
+
+    body = ['<body style="text-align: center;margin: 0 25%; border-left: .1rem dotted gray; border-right: .1rem dotted gray;">']
+    body.append('<hr>')
+    body.append('<h3>Result of Subtraction Operation </h3>')
+    body.append('<br>')
+
+    parag = '<p style="text-align: left;padding: 0 2%;">{}</p>'.format(str(result))
+    body.append(parag)
+    body.append('<br>')
+    body.append('<a href="/">Back to the main page.</a>')
+    body.append('<hr>')
+    body.append('</body>')
+    return '\n'.join(body)
 
 
 def multiple(*args):
     """ Returns a STRING with the sum of the arguments """
 
     operands = list(map(int, list(args)))
-    return "The result is: {}".format(str(numpy.prod(operands)))
+    result = "The result is: {}".format(str(numpy.prod(operands)))
+    
+    body = ['<body style="text-align: center;margin: 0 25%; border-left: .1rem dotted gray; border-right: .1rem dotted gray;">']
+    body.append('<hr>')
+    body.append('<h3>Result of Multiplication Operation </h3>')
+    body.append('<br>')
+
+    parag = '<p style="text-align: left;padding: 0 2%;">{}</p>'.format(str(result))
+    body.append(parag)
+    body.append('<br>')
+    body.append('<a href="/">Back to the main page.</a>')
+    body.append('<hr>')
+    body.append('</body>')
+    return '\n'.join(body)
 
 
 def divide(*args):
     """ Returns a STRING with the sum of the arguments """
 
     operands = list(map(int, list(args)))
-    return "The result is: {}".format(str(operands[0]/operands[1]))
+    result = "The result is: {}".format(str(operands[0]/operands[1]))
 
+    body = ['<body style="text-align: center;margin: 0 25%; border-left: .1rem dotted gray; border-right: .1rem dotted gray;">']
+    body.append('<hr>')
+    body.append('<h3>Result of Division Operation </h3>')
+    body.append('<br>')
 
-def operations(*args):
+    parag = '<p style="text-align: left;padding: 0 2%;">{}</p>'.format(str(result))
+    body.append(parag)
+    body.append('<br>')
+    body.append('<a href="/">Back to the main page.</a>')
+    body.append('<hr>')
+    body.append('</body>')
+    return '\n'.join(body)
+
+def index(*args):
     """ Returns a STRING with the sum of the arguments """
-    operations = ['add', 'subtract', 'multiply', 'divide']
+    args = ['25', '32']
+    operations = ['Add', 'Subtract', 'Multiply', 'Divide']
     body = ['<body style="text-align: center;margin: 0 25%; border-left: .1rem dotted gray; border-right: .1rem dotted gray;">',
-            '<nav style="font-size: 3rem; height: 5rem; background-color: #e3f2fd; align:center; margin: 0 auto; border-radius: .7rem;">']
-    item_template = '<a id="{}" href="/{}">{}</a>'
-
+            '<nav style="font-size: 2rem; height: 5rem; background-color: #e3f2fd; align:center; margin: 0 auto; font-family: Courier, Ariel;">']
+    item_template = '<a id="{}" href="/{}/{}/{}">{}</a>'
+    body.append('<hr>')
     for operation in operations:
-        body.append(item_template.format(operation, operation, operation))
+        body.append(item_template.format(operation, operation.lower(), args[0], args[1], operation))
     body.append('</nav>')
+    
     body.append('<br>')
 
     body.append('<h3>Math Operations </h3>')
+    body.append('<br>')
+
+    parag = '<p style="text-align: left;padding: 0 2%;">1) To use this site, click on the menu items, '
+    parag += 'which will direct you to a new page.</p>'
+    parag += '<p style="text-align: left;padding: 0 2%;">2) On the address bar of the new page, '
+    parag += 'after the Math operator, enter two numbers separated by "/", and hit enter.</p>'
+    parag += '<p style="text-align: left;padding: 0 2%;">3) '
+    parag += 'You should see the result of the math operation on the operands in the page.</p>'
+
+    body.append(parag)
+    body.append('<br>')
+    body.append('<hr>')
     body.append('</body>')
-    # <a id="donation_list" href="{{ url_for("all") }}">Donations</a>
-    # </nav>
     # body = ['<h3>Math Operations </h3>']
     # item_template = '<li><a href="/{}">{}</a></li>'
-    
     # operations = ['add', 'subtract', 'multiply', 'divide']
 
     # body.append('<ul>')
     # for operation in operations:
     #     body.append(item_template.format(operation, operation))
     # body.append('</ul>')
-    # # <form>
-    # # <table>
-    # #     <tr><td>Operand1</td><td>{author}</td></tr>
-    # #     <tr><td>Operand2</td><td>{publisher}</td></tr>
-    # #     <tr><td></td><td>{isbn}</td></tr>
-    # # </table>
-    # # </form>
 
     return '\n'.join(body)
 
-    # return "Math Operations {}".format(str(args))
-
-
-# TODO: Add functions for handling more arithmetic operations.
 
 def resolve_path(path):
     """
@@ -131,7 +178,7 @@ def resolve_path(path):
     args = ['25', '32']
 
     funcs = {
-        '':operations,
+        '':index,
         'add': add,
         'subtract': subtract,
         'multiply': multiple,
@@ -169,6 +216,9 @@ def application(environ, start_response):
     except NameError:
         status = "404 Not Found"
         body = "<h1>Not Found</h1>"
+    except ZeroDivisionError as zerror:
+        status = "404 Dvision by Zero"
+        body = "<h1>Division by Zero</h1>"
     except Exception:
         status = "500 Internal Server Error"
         body = "<h1>Internal Server Error</h1>"
