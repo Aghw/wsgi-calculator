@@ -216,7 +216,7 @@ def application(environ, start_response):
     except NameError:
         status = "404 Not Found"
         body = "<h1>Not Found</h1>"
-    except ZeroDivisionError as zerror:
+    except ZeroDivisionError:
         status = "404 Dvision by Zero"
         body = "<h1>Division by Zero</h1>"
     except Exception:
