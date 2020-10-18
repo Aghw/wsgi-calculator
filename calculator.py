@@ -1,3 +1,7 @@
+import sys
+import re
+import numpy
+
 """
 For your homework this week, you'll be creating a wsgi application of
 your own.
@@ -47,9 +51,69 @@ def add(*args):
 
     # TODO: Fill sum with the correct value, based on the
     # args provided.
-    sum = "0"
+    result = sum(map(int, list(args)))
+    return "The total is: {}".format(str(result))
 
-    return sum
+
+def subtract(*args):
+    """ Returns a STRING with the sum of the arguments """
+
+    operands = list(map(int, list(args)))
+    result = [first - second for first, second in zip(operands, operands[1:])]
+    return "The result is: {}".format(str(result[0]))
+
+
+def multiple(*args):
+    """ Returns a STRING with the sum of the arguments """
+
+    operands = list(map(int, list(args)))
+    return "The result is: {}".format(str(numpy.prod(operands)))
+
+
+def divide(*args):
+    """ Returns a STRING with the sum of the arguments """
+
+    operands = list(map(int, list(args)))
+    return "The result is: {}".format(str(operands[0]/operands[1]))
+
+
+def operations(*args):
+    """ Returns a STRING with the sum of the arguments """
+    operations = ['add', 'subtract', 'multiply', 'divide']
+    body = ['<body style="text-align: center;margin: 0 25%; border-left: .1rem dotted gray; border-right: .1rem dotted gray;">',
+            '<nav style="font-size: 3rem; height: 5rem; background-color: #e3f2fd; align:center; margin: 0 auto; border-radius: .7rem;">']
+    item_template = '<a id="{}" href="/{}">{}</a>'
+
+    for operation in operations:
+        body.append(item_template.format(operation, operation, operation))
+    body.append('</nav>')
+    body.append('<br>')
+
+    body.append('<h3>Math Operations </h3>')
+    body.append('</body>')
+    # <a id="donation_list" href="{{ url_for("all") }}">Donations</a>
+    # </nav>
+    # body = ['<h3>Math Operations </h3>']
+    # item_template = '<li><a href="/{}">{}</a></li>'
+    
+    # operations = ['add', 'subtract', 'multiply', 'divide']
+
+    # body.append('<ul>')
+    # for operation in operations:
+    #     body.append(item_template.format(operation, operation))
+    # body.append('</ul>')
+    # # <form>
+    # # <table>
+    # #     <tr><td>Operand1</td><td>{author}</td></tr>
+    # #     <tr><td>Operand2</td><td>{publisher}</td></tr>
+    # #     <tr><td></td><td>{isbn}</td></tr>
+    # # </table>
+    # # </form>
+
+    return '\n'.join(body)
+
+    # return "Math Operations {}".format(str(args))
+
 
 # TODO: Add functions for handling more arithmetic operations.
 
@@ -66,6 +130,24 @@ def resolve_path(path):
     func = add
     args = ['25', '32']
 
+    funcs = {
+        '':operations,
+        'add': add,
+        'subtract': subtract,
+        'multiply': multiple,
+        'divide': divide,
+    }
+
+    path = path.strip('/').split('/')
+
+    func_name = path[0].lower()
+    args = path[1:]
+
+    try:
+        func = funcs[func_name]
+    except KeyError:
+        raise NameError
+
     return func, args
 
 def application(environ, start_response):
@@ -76,9 +158,29 @@ def application(environ, start_response):
     #
     # TODO (bonus): Add error handling for a user attempting
     # to divide by zero.
-    pass
+    headers = [("Content-type", "text/html")]
+    try:
+        path = environ.get('PATH_INFO', None)
+        if path is None:
+            raise NameError
+        func, args = resolve_path(path)
+        body = func(*args)
+        status = "200 OK"
+    except NameError:
+        status = "404 Not Found"
+        body = "<h1>Not Found</h1>"
+    except Exception:
+        status = "500 Internal Server Error"
+        body = "<h1>Internal Server Error</h1>"
+        print(traceback.format_exc())
+    finally:
+        headers.append(('Content-length', str(len(body))))
+        start_response(status, headers)
+        return [body.encode('utf8')]
 
 if __name__ == '__main__':
     # TODO: Insert the same boilerplate wsgiref simple
     # server creation that you used in the book database.
-    pass
+    from wsgiref.simple_server import make_server
+    srv = make_server('localhost', 8080, application)
+    srv.serve_forever()
