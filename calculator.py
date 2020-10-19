@@ -1,5 +1,6 @@
 import sys
 import re
+import traceback
 import numpy
 
 """
@@ -65,7 +66,7 @@ def add(*args):
     return '\n'.join(body)
 
 def subtract(*args):
-    """ Returns a STRING with the sum of the arguments """
+    """ Returns a STRING with the result of subtracting second number from first number """
 
     operands = list(map(int, list(args)))
     subtract = [first - second for first, second in zip(operands, operands[1:])]
@@ -86,7 +87,7 @@ def subtract(*args):
 
 
 def multiple(*args):
-    """ Returns a STRING with the sum of the arguments """
+    """ Returns a STRING with the product of the arguments """
 
     operands = list(map(int, list(args)))
     result = "The result is: {}".format(str(numpy.prod(operands)))
@@ -106,7 +107,7 @@ def multiple(*args):
 
 
 def divide(*args):
-    """ Returns a STRING with the sum of the arguments """
+    """ Returns a STRING with the result of dividing first number by second number """
 
     operands = list(map(int, list(args)))
     result = "The result is: {}".format(str(operands[0]/operands[1]))
@@ -146,7 +147,7 @@ def index(*args):
     parag += '<p style="text-align: left;padding: 0 2%;">2) On the address bar of the new page, '
     parag += 'after the Math operator, enter two numbers separated by "/", and hit enter.</p>'
     parag += '<p style="text-align: left;padding: 0 2%;">3) '
-    parag += 'You should see the result of the math operation on the operands in the page.</p>'
+    parag += 'You should see in the new page, the result of the math operation on the two operands.</p>'
 
     body.append(parag)
     body.append('<br>')
@@ -170,7 +171,7 @@ def resolve_path(path):
     args = ['25', '32']
 
     funcs = {
-        '':index,
+        'default':index,
         'add': add,
         'subtract': subtract,
         'multiply': multiple,
@@ -179,7 +180,7 @@ def resolve_path(path):
 
     path = path.strip('/').split('/')
 
-    func_name = path[0].lower()
+    func_name = 'default' if path[0] == '' else path[0].lower()
     args = path[1:]
 
     try:
@@ -210,7 +211,7 @@ def application(environ, start_response):
         body = "<h1>Not Found</h1>"
     except ZeroDivisionError:
         status = "404 Dvision by Zero"
-        body = "<h1>Division by Zero</h1>"
+        body = "<h1>Error: Division by Zero error encountered.</h1>"
     except Exception:
         status = "500 Internal Server Error"
         body = "<h1>Internal Server Error</h1>"
@@ -221,8 +222,6 @@ def application(environ, start_response):
         return [body.encode('utf8')]
 
 if __name__ == '__main__':
-    # TODO: Insert the same boilerplate wsgiref simple
-    # server creation that you used in the book database.
     from wsgiref.simple_server import make_server
     srv = make_server('localhost', 8080, application)
     srv.serve_forever()
