@@ -152,14 +152,6 @@ def index(*args):
     body.append('<br>')
     body.append('<hr>')
     body.append('</body>')
-    # body = ['<h3>Math Operations </h3>']
-    # item_template = '<li><a href="/{}">{}</a></li>'
-    # operations = ['add', 'subtract', 'multiply', 'divide']
-
-    # body.append('<ul>')
-    # for operation in operations:
-    #     body.append(item_template.format(operation, operation))
-    # body.append('</ul>')
 
     return '\n'.join(body)
 
